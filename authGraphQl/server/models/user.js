@@ -1,13 +1,13 @@
-const bcrypt = require('bcrypt-nodejs');
-const crypto = require('crypto');
-const mongoose = require('mongoose');
+const bcrypt = require("bcrypt-nodejs");
+const crypto = require("crypto");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Every user has an email and password.  The password is not stored as
 // plain text - see the authentication helpers below.
 const UserSchema = new Schema({
   email: String,
-  password: String
+  password: String,
 });
 
 // The user's password is never saved in plain text.  Prior to saving the
@@ -15,13 +15,19 @@ const UserSchema = new Schema({
 // procedure that modifies the password - the plain text password cannot be
 // derived from the salted + hashed version. See 'comparePassword' to understand
 // how this is used.
-UserSchema.pre('save', function save(next) {
+UserSchema.pre("save", function save(next) {
   const user = this;
-  if (!user.isModified('password')) { return next(); }
+  if (!user.isModified("password")) {
+    return next();
+  }
   bcrypt.genSalt(10, (err, salt) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     bcrypt.hash(user.password, salt, null, (err, hash) => {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       user.password = hash;
       next();
     });
@@ -39,4 +45,4 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword,
   });
 };
 
-mongoose.model('user', UserSchema);
+mongoose.model("user", UserSchema);
