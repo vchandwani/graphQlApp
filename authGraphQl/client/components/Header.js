@@ -43,7 +43,7 @@ const Header = () => {
     handleCloseUserMenu();
     logout()
       .then(() => {
-        window.location.hash = "#/login";
+        console.log("Logout successful");
       })
       .catch((err) => {
         console.error("Logout failed", err);
