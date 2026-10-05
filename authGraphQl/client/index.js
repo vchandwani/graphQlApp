@@ -1,13 +1,22 @@
+import "regenerator-runtime/runtime";
 import React from "react";
 import ReactDOM from "react-dom";
-import ApolloClient from "apollo-client";
-import { ApolloProvider } from "react-apollo";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client/react";
 import { Router, hashHistory, Route, IndexRoute } from "react-router";
 import App from "./components/App";
 import Home from "./components/Home";
 
+const link = createHttpLink({
+  uri: "/graphql",
+  credentials: "same-origin",
+});
+
 const client = new ApolloClient({
-  dataIdFromObject: (object) => object.id,
+  link,
+  cache: new InMemoryCache({
+    dataIdFromObject: (object) => object.id,
+  }),
 });
 
 const Root = () => {
